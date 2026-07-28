@@ -1,5 +1,5 @@
 const fs = require("fs");
-
+const os = require("os")
 //sync- blocking, async- non-blocking
 
 //*read
@@ -39,3 +39,7 @@ const fs = require("fs");
 // })
 
 // fs.unlinkSync("./async.txt")
+
+//os - workers
+
+console.log(os.cpus().length)
