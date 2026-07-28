@@ -1,0 +1,13 @@
+{
+  "name": "day-1",
+  "version": "1.0.0",
+  "description": "content about nodejs",
+  "main": "hello.js",
+  "scripts": {
+    "start": "node hello.js"
+  },
+  "keywords": [],
+  "author": "Neeraj",
+  "license": "ISC",
+  "type": "commonjs"
+}
