@@ -1,0 +1,13 @@
+{
+  "name": "day-5",
+  "version": "1.0.0",
+  "description": "Module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Neeraj",
+  "license": "ISC",
+  "type": "commonjs"
+}
