@@ -1,43 +1,14 @@
-// OS- Modules
-const { log } = require("console")
-const os = require("os")
+const crypto = require("crypto");
 
-// get os platform and user info
+//random bytes
+const randomValues = crypto.randomBytes(100)
 
-console.log("OS PLATFORM:", os.platform)
-console.log("USER INFO:", os.userInfo())
+console.log(randomValues.toString("hex"));
 
-// get os cpu-core
-console.log("CPU CORE: ", os.cpus().length)
+//create hash
 
-// free memory get 
-console.log("FREE MEMORY: ", os.freemem(), "bytes");
+const hashValue = crypto.createHash("sha256").update("Neeraj").digest("hex");
 
-//total memory
-console.log("Total Memory: ", os.totalmem(), "bytes");
-
-// home directory
-console.log("Home Dir:", os.homedir());
-
-//arc 
-console.log("Architecture: ", os.arch());
-
-//hostname
-console.log("HostName: ", os.hostname());
-
-//network interface
-console.log("Network Interface: ", os.networkInterfaces());
-
-//release info 
-console.log("Release info:", os.release());
-
-//temp directory
-console.log("Temp Dir: ", os.tmpdir());
-
-//os uptime 
-console.log("OS Uptime: ", os.uptime(), "seconds");
-
-
-
-
-
+const inputValue = "Neeraj";
+const matchValue = crypto.createHash("sha256").update(inputValue).digest("hex");
+console.log(hashValue === matchValue);
