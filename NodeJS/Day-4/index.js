@@ -4,12 +4,25 @@ const server = http.createServer((req,res)=>{
     //? Downloading file in bad way.
     // const read = fs.readFileSync("text.txt");
     //?Downloading file in good way.
-    const readableStreams = fs.createReadStream("text.txt")
-    readableStreams.pipe(res)
+    // const readableStreams = fs.createReadStream("text.txt")
+    // readableStreams.pipe(res)
     // res.end()
+
+    // ? in copy paste way - bad-way
+    // const file = fs.readFileSync("text.txt")
+    // fs.writeFileSync("output.txt", file)
+    // res.end()
+
+    // ? in copy paste way - good-way
+    const readStream = fs.createReadStream("text.txt")
+    const writeStream = fs.createWriteStream("output.txt")
+    readStream.on("data", (chunk)=>{
+        console.log("data: ", chunk)
+        writeStream.write(chunk)
+    })
 })
 
-server.listen(3000, ()=>{
-    console.log("Server is running on 3000.")
+server.listen(8080, ()=>{
+    console.log("Server is running on 8080.")
 })
 
