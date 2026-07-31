@@ -22,7 +22,7 @@ const server = http.createServer((req,res)=>{
     })
 })
 
-server.listen(8080, ()=>{
-    console.log("Server is running on 8080.")
-})
+// server.listen(8080, ()=>{
+//     console.log("Server is running on 8080.")
+// })
 
