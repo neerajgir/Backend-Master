@@ -1,0 +1,13 @@
+{
+  "name": "day-4",
+  "version": "1.0.0",
+  "description": "Its all about streams in node",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Neeraj",
+  "license": "ISC",
+  "type": "commonjs"
+}
