@@ -1,5 +1,5 @@
 import express from "express";
-import {data} from "./data/data.js"
+import data from "./data/data.js"
 const app = express();
 const PORT = 8080;
 
@@ -11,11 +11,16 @@ app.get("/", (req,res)=>{
 
 // industry standard
 app.get("/api/v1/users", (req,res)=>{
-    res.status(200).json({
-        id: 1,
-        name: "Neeraj Gir",
-        displayName: "neearjgir"
-    });
+    //req.params
+   const {name} = req.params
+
+   if(name){
+    const user = data.filter((user)=>{
+        return user.name == name
+    })
+    res.status(200).send(user)
+   }
+   res.status(200).send(data)
 })
 
 
