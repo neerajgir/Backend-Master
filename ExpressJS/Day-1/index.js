@@ -122,6 +122,7 @@ app.delete("/api/v1/users/:id", (req,res)=>{
         data: deleteUser
     })
 })
+
 app.listen(PORT, (res,req)=> {
     console.log(`Server is running on port ${PORT}`)
 })
