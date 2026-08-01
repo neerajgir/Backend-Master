@@ -46,10 +46,10 @@ app.post("/api/v1/users", (req,res)=>{
         password
     }
     data.push(userData);
-    res.status(200).json({message: "User added successfully", data: userData})
+    res.status(201).json({message: "User added successfully", data: userData})
 })
 
-
+// 
 
 
 app.listen(PORT, (res,req)=> {
