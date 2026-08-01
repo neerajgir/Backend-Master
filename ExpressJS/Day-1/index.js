@@ -1,8 +1,9 @@
-import express from "express";
+import express, { json } from "express";
 import data from "./data/data.js"
+
 const app = express();
 const PORT = 8080;
-
+app.use(express.json());
 
 // Get -Request
 app.get("/", (req,res)=>{
@@ -34,6 +35,19 @@ app.get("/api/v1/users/:id",(req,res)=>{
     res.status(200).json({message: "User Found:", Data: users})
 })
 
+//post - send
+
+app.post("/api/v1/users", (req,res)=>{
+    // req.body and post
+    const {username, password} = req.body;
+    const userData = {
+        id: data.length + 1,
+        username, 
+        password
+    }
+    data.push(userData);
+    res.status(200).json({message: "User added successfully", data: userData})
+})
 
 
 
