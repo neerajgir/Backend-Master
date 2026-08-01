@@ -49,7 +49,28 @@ app.post("/api/v1/users", (req,res)=>{
     res.status(201).json({message: "User added successfully", data: userData})
 })
 
-// 
+// PUT AND PATCH - PUT UPDATE ALL FIELDS AND PATCH UPDATE SPECIFIC FIELD.
+
+app.put("/api/v1/users/:id", (req,res)=>{
+    const {body , params:{id}} = req;
+    // const {id} = req.params;
+    // const {name, email} = req.body;
+
+    const parseId = parseInt(id)
+    const userIndex = data.findIndex((user)=>{
+       return user.id == parseId
+    })
+
+    if(userIndex === -1){
+        res.status(404).send("User Not Found!")
+    } 
+    data[userIndex] = {
+        id: parseId,
+        ...body
+    }
+
+    res.status(200).json({message: "User Updated!", data:[userIndex]})
+})
 
 
 app.listen(PORT, (res,req)=> {
