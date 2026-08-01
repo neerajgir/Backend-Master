@@ -96,6 +96,32 @@ app.patch("/api/v1/users/:id", (req, res)=>{
     res.status(200).json({message: "User Updated!", data: data[userIndex]})
 })
 
+
+// Delete
+app.delete("/api/v1/users/:id", (req,res)=>{
+    const {id} = req.params
+
+    const parseId = parseInt(id)
+
+    if(isNaN(parseId)){
+        return res.status(400).send("Invalid User ID")
+    }
+
+    const userIndex = data.find((user)=>{
+        return user.id == parseId
+    })
+
+    if (userIndex === -1) {
+        return res.status(404).send("User Not Found!");
+    } 
+
+    const [deleteUser] = data.splice(userIndex, 1);
+
+    res.status(200).json({
+        message: "User Deleted Successfully",
+        data: deleteUser
+    })
+})
 app.listen(PORT, (res,req)=> {
     console.log(`Server is running on port ${PORT}`)
 })
