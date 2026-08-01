@@ -23,7 +23,16 @@ app.get("/api/v1/users", (req,res)=>{
    res.status(200).send(data)
 })
 
+//router params
+app.get("/api/v1/users/:id",(req,res)=>{
+    const {id} = req.params
+    const parseId = parseInt(id)
 
+    const users = data.find((user)=>{
+        return user.id == parseId
+    })
+    res.status(200).json({message: "User Found:", Data: users})
+})
 
 
 
