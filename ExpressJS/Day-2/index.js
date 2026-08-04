@@ -8,10 +8,14 @@ function sayHi(req,res,next){
     console.log("Hi i am middleware");
     next();
 }
-app.use(sayHi)
+// app.use(sayHi)
 
 
 // specific routes
+app.get('/', sayHi, (req,res)=>{
+    res.send("Hello World!")
+})
+
 // inbuilt middleware
 app.get('/', (req,res)=>{
     res.send("Hello World!")
