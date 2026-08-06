@@ -5,9 +5,18 @@ import authRoute from "./src/routes/auth.route.js"
 const app = express();
 const PORT = 3000;
 
-
+// global middleware
 app.use(express.json());
-
+app.use(session({
+    secret: "taskmanager",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure:false,
+        maxAge: 1000*60*60*25
+    }  
+}))
 
 // routes
 app.get("/",(req,res)=>{
