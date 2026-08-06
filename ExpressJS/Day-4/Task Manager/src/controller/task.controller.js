@@ -2,11 +2,11 @@ import {readTask, writeTask} from '../utils/file.utils.js'
 
 const getAllTask = (req,res)=>{
     try {
-        const username = req.session?.user?.username;
-        const tasks = readTask();
-        const userTasks = tasks.filter(task => task && task.createdBy === username);
-
-        return res.status(200).json(userTasks);
+        // 1. Get the array data from your file helper
+        const tasks = readTask(); 
+        
+        // 2. Explicitly send the data back to the client as JSON
+        return res.status(200).json(tasks);
         
     } catch (error) {
         console.error("Error in getAllTask controller:", error);
@@ -49,7 +49,7 @@ const updateTask = (req,res)=>{
     try{
     const id = Number(req.params.id)
     const { title: newTitle, description: newDescription } = req.body;
-    const username = req.session?.user?.username
+    const {username} = req.session?.user?.username
     if (!username) {
         return res.status(401).json({ message: "Unauthorized: No session found" });
     }
@@ -79,7 +79,7 @@ const updateTask = (req,res)=>{
 const deleteTask = (req,res)=>{
     try {
         const id = Number(req.params.id)
-        const username = req.session?.user?.username
+        const {username} = req.session?.user?.username
         if (!username) {
             return res.status(401).json({ message: "Unauthorized: No session found" });
         }
@@ -89,7 +89,7 @@ const deleteTask = (req,res)=>{
             return res.status(404).json({ message: "Task not found or unauthorized" });
         }
 
-        const filteredTasks = allTasks.filter(task => !(task && task.id === id && task.createdBy === username));
+        const filteredTasks = allTasks.filter(task => !task || task.id !== id);
         writeTask(filteredTasks)
 
         return res.status(200).json({ message: "Task deleted successfully" });

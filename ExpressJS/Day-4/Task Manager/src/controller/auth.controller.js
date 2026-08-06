@@ -3,7 +3,8 @@ const login = (req,res)=>{
     if(!username){
         return res.status(400).json({error: "Username is required"});
     }
-    req.session.user = { username };
+    req.session.user = { username: "Neeraj" };
+    req.session.user.username = username; 
     req.session.save((err) => {
         if (err) {
             console.error("Session saving error:", err);
@@ -14,12 +15,12 @@ const login = (req,res)=>{
 }
 
 const logout = (req,res) =>{
-    req.session.destroy((error)=>{
+    res.clearCookie("username");
+    res.session.destroy((error)=>{
         if(error){
-            return res.status(500).json({error: "Something went wrong"})
+            res.status(500).json({error: "Something went wrong"})
         }
-        res.clearCookie("connect.sid");
-        return res.json({message: "Logout successful"})
+        res.json({message: "Logout successful"})
     })
 }
 
