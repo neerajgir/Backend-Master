@@ -19,10 +19,21 @@ app.get("/", (req,res)=>{
     console.log(req.session.id);
     res.send("Hello World")
 })
+// session create
+app.get("/login", (req,res)=>{
+    req.session.user = {
+        name: "Neeraj",
+        email: "neeraj@example.com",
+        age: 25
+    }
+    res.send("User LoggedIn")
+})
 
-
-
-
+// delete session
+app.get("/logout", (req,res)=>{
+    req.session.destroy();
+    res.send("User Logout");
+})
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on Port ${PORT}`)
