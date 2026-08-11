@@ -372,3 +372,132 @@ db.collectionName.find({
 | **`$or`** | Un documents ko match karta hai jo kam se kam ek condition ko satisfy karein. |
 | **`$not`** | Condition ko ulta kar deta hai (jo satisfy na ho unhe chunega). |
 | **`$nor`** | Un documents ko match karta hai jo kisi bhi condition ko satisfy na karein. |
+
+# Complex Expressions in MongoDB: `$expr`, `$exists`, aur `$type`
+
+MongoDB mein jab hume thode complex conditions handling ki zaroorat padti hai, tab ye teen operators bohot kaam aate hain.
+
+---
+
+## 1. `$expr`
+
+`$expr` operator aapko normal queries ke andar **aggregation expressions** use karne ki permission deta hai. Iski madad se aap ek hi document ke do alag fields ko aapas mein compare ya calculate kar sakte ho.
+
+### Example:
+Aise documents dhundho jahan `price` field ki value `cost` field se badi ho:
+
+```javascript
+db.collectionName.find({
+  $expr: { $gt: ["$price", "$cost"] }
+});
+```
+
+Agar hum is `monthlyBudget` data set par kaam kar rahe hain:
+
+```javascript
+db.monthlyBudget.insertMany([
+  { _id: 1, category: "food", budget: 400, spent: 450 },
+  { _id: 2, category: "drinks", budget: 100, spent: 150 },
+  { _id: 3, category: "clothes", budget: 100, spent: 50 },
+  { _id: 4, category: "misc", budget: 500, spent: 300 },
+  { _id: 5, category: "travel", budget: 200, spent: 650 }
+]);
+```
+
+Toh jin documents mein `spent` budget se zyada hai, unhe hum `$expr` se aasani se filter kar sakte hain.
+
+### Explanation:
+* `$gt`: Check karta hai ki pehli value (e.g. price) doosri value (e.g. cost) se badi hai ya nahi.
+* `$expr`: Normal find query ke andar `$gt`, `$lt`, `$add`, `$subtract` jaise aggregation operators use karne ki freedom deta hai.
+
+---
+
+## 2. `$exists`
+
+`$exists` operator ka use tab hota hai jab aapko ye check karna ho ki kisi document mein koi specific field maujood hai ya nahi.
+
+### Example 1:
+Aise documents dhundho jahan `description` field maujood ho:
+
+```javascript
+db.collectionName.find({
+  description: { $exists: true }
+});
+```
+
+### Example 2:
+Aise documents dhundho jahan `discount` field nahi ho:
+
+```javascript
+db.collectionName.find({
+  discount: { $exists: false }
+});
+```
+
+### Explanation:
+* `$exists: true`: Un documents ko match karega jahan field hai (bhale hi uski value `null` kyon na ho).
+* `$exists: false`: Un documents ko match karega jahan wo field poori tarah se missing hai.
+
+---
+
+## 3. `$type`
+
+`$type` operator se aap kisi field ki BSON data type ke basis par filter kar sakte ho.
+
+### Example 1:
+Aise documents filter karo jahan `age` field ek number ho:
+
+```javascript
+db.collectionName.find({
+  age: { $type: "number" }
+});
+```
+
+### Example 2:
+Aise documents filter karo jahan `tags` field ek array ho:
+
+```javascript
+db.collectionName.find({
+  tags: { $type: "array" }
+});
+```
+
+### BSON Types aur unke Numbers:
+
+| BSON Type | Alias | Number |
+|---|---|---|
+| Double | `"double"` | 1 |
+| String | `"string"` | 2 |
+| Object | `"object"` | 3 |
+| Array | `"array"` | 4 |
+| Binary Data | `"binData"` | 5 |
+| Undefined (deprecated) | `"undefined"` | 6 |
+| ObjectId | `"objectId"` | 7 |
+| Boolean | `"bool"` | 8 |
+| Date | `"date"` | 9 |
+| Null | `"null"` | 10 |
+| Regular Expression | `"regex"` | 11 |
+| JavaScript | `"javascript"` | 13 |
+| Symbol (deprecated) | `"symbol"` | 14 |
+| JavaScript (with scope) | `"javascriptWithScope"` | 15 |
+| 32-bit Integer | `"int"` | 16 |
+| Timestamp | `"timestamp"` | 17 |
+| 64-bit Integer | `"long"` | 18 |
+| Decimal128 | `"decimal"` | 19 |
+| Min Key | `"minKey"` | -1 |
+| Max Key | `"maxKey"` | 127 |
+
+---
+
+## `$exists` aur `$type` ko Combine Karna
+
+Aap dono operators ko ek sath jod kar aur ziada specific search query bana sakte ho.
+
+### Example:
+Aise documents dhundho jahan `age` field maujood bhi ho aur uska type `number` ho:
+
+```javascript
+db.collectionName.find({
+  age: { $exists: true, $type: "number" }
+});
+```
