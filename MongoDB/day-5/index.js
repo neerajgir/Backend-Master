@@ -3,6 +3,7 @@ import connectDB from './config/db.js';
 
 const app = express();
 connectDB();
+app.use(express.json());
 const PORT = 3000;
 
 app.get('/', (req,res)=>{
