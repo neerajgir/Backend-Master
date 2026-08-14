@@ -18,4 +18,19 @@ export const addTask = async (req,res)=>{
     }
 }
 
-export const fetchTasks = async ()=>{}
+export const fetchTasks = async (req,res)=>{
+    try {
+        const tasks = await getTask(req.session.userId)
+        res.status(200).json({
+            success: true,
+            message: "Task Fetch Successfully",
+            data: tasks
+        })
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message: "Error in Fetching task",
+            error: error.message
+        })
+    }
+}
