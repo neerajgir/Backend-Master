@@ -5,9 +5,9 @@ import { validateSession } from "../middlewares/session.middleware.js";
 const router = express.Router();
 
 //addTask
-router.post('/', validateSession, addTask)
+router.post('/add', validateSession, addTask)
 
 //fetch tasks
-router.get('/', validateSession, fetchTasks)
+router.get('/fetch', validateSession, fetchTasks)
 
 export default router;

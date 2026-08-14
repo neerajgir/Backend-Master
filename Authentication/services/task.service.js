@@ -1,11 +1,11 @@
-import { addTask, fetchTasks } from "../controllers/task.controller.js";
+import Task from "../models/tasks.model.js";
 
 export const createTask = async (userId, title, description)=>{
-    const task = new addTask({userId, title, description});
+    const task = new Task({userId, title, description});
 
     return await task.save();
 }
 
 export const getTask = async (userId) => {
-    return await fetchTasks.find({userId}).sort({createdAt: -1})
+    return await Task.find({userId}).sort({createdAt: -1})
 }
