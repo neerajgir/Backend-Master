@@ -9,6 +9,16 @@ dotenv.config()
 app.use(express.json());
 const PORT = process.env.PORT;
 
+
+//session config
+app.use(
+    session({
+        secret:process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true,
+        cookie: {maxAge: 600000} //10 Minutes 
+    })
+)
 app.get('/', (req,res)=>{
     res.send("Hello Auth")
 })
