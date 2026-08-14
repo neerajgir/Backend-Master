@@ -4,6 +4,7 @@ dotenv.config()
 import connectDB from './configs/db.js'
 import session from 'express-session';
 import userRoutes from './routes/user.routes.js'
+import taskRoutes from './routes/task.routes.js'
 
 const app = express();
 app.use(express.json());
@@ -23,6 +24,7 @@ app.use(
 //routes
 
 app.use('/api/user', userRoutes)
+app.use('/api/task', taskRoutes)
 app.get('/', (req,res)=>{
     res.send("Hello Auth")
 })
