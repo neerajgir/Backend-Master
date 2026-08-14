@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './configs/db.js'
 import session from 'express-session';
-
+import userRoutes from './routes/user.routes.js'
 
 const app = express();
 dotenv.config()
@@ -19,6 +19,10 @@ app.use(
         cookie: {maxAge: 600000} //10 Minutes 
     })
 )
+
+//routes
+
+app.use('/api/user', userRoutes)
 app.get('/', (req,res)=>{
     res.send("Hello Auth")
 })
