@@ -18,6 +18,25 @@ export const signup = async (req,res)=>{
     }
 }
 
-export const login = ()=>{}
+export const login = async (req,res)=>{
+    try {
+        const {username, password} = req.body;
+        const user = await LoginUser(username, password);
+
+        //save userid in session
+        req.session.userId = user._id;
+        res.status(200).json({
+            success: true,
+            message: "Login Successfully."
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error in login!",
+            error: error.message
+        })
+    }
+
+}
 
 export const logout = ()=>{}
