@@ -1,4 +1,4 @@
-import { createTask, getTask } from "../services/task.service.js";
+import { createTask, getTask, updateTaskById, deleteTaskById  } from "../services/task.service.js";
 
 
 export const addTask = async (req,res)=>{
@@ -48,3 +48,60 @@ export const fetchTasks = async (req,res)=>{
         })
     }
 }
+
+// Update an existing task
+export const updateTask = async (req, res) => {
+    try {
+        const { taskId } = req.params; // Extracts ID from URL, e.g., /api/task/update/12345
+        const updateData = req.body;   // Extracts new values (title, description, etc.)
+
+        const updatedTask = await updateTaskById(taskId, req.session.userId, updateData);
+
+        if (!updatedTask) {
+            return res.status(404).json({
+                success: false,
+                message: "Task not found or unauthorized to update."
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Task Updated Successfully.",
+            data: updatedTask
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error updating task.",
+            error: error.message
+        });
+    }
+};
+
+
+// Delete a task
+export const deleteTask = async (req, res) => {
+    try {
+        const { taskId } = req.params;
+
+        const deletedTask = await deleteTaskById(taskId, req.session.userId);
+
+        if (!deletedTask) {
+            return res.status(404).json({
+                success: false,
+                message: "Task not found or unauthorized to delete."
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Task Deleted Successfully."
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error deleting task.",
+            error: error.message
+        });
+    }
+};
