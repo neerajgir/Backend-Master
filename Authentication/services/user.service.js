@@ -15,3 +15,9 @@ export const LoginUser = async (username, password)=>{
 
     return user;
 }
+
+export const logoutUser = async (userId) => {
+    // If you need to update user status in the DB when they log out, do it here:
+    await User.findByIdAndUpdate(userId, { isOnline: false });
+    return { success: true };
+};
