@@ -14,6 +14,6 @@ router.get('/fetch', validateSession, fetchTasks)
 router.put('/update/:taskId', validateSession, updateTask)
 
 //delete task
-router.delete('delete/:taskId', validateSession, deleteTask)
+router.delete('/delete/:taskId', validateSession, deleteTask)
 
 export default router;
