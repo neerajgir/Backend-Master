@@ -1,13 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
+dotenv.config()
 import connectDB from './configs/db.js'
 import session from 'express-session';
 import userRoutes from './routes/user.routes.js'
 
 const app = express();
-dotenv.config()
 app.use(express.json());
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 
 //session config
