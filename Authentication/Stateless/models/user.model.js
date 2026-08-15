@@ -15,15 +15,14 @@ const userSchema = new mongoose.Schema({
 
 //hash pass before save it
 
-userSchema.pre("save", async (next) => {
-    if(!this.isModified("password")) return next();
-    this.password = await bcrypt.hash(this.password, 10)
-    next();
-})
+userSchema.pre("save", async function () {
+    if (!this.isModified("password")) return;
+    this.password = await bcrypt.hash(this.password, 10);
+});
 
-userSchema.methods.comparePassword = async (password) => {
-    return bcrypt.compare(password, this.password)
-}
+userSchema.methods.comparePassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
+};
 
 const user = mongoose.model("User", userSchema)
 
