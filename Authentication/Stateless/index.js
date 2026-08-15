@@ -8,9 +8,8 @@ const app = express();
 app.use(express.json())
 const PORT = process.env.PORT
 
-app.get("/", (req,res)=>{
-    res.send("Hello")
-})
+//routes
+app.use("/auth", authRoutes)
 
 
 connectDB().then(()=>{
