@@ -112,8 +112,13 @@ export const logout = async (req,res) => {
 
 export const updateProfile = async (req,res) => {
     try {
-        
+        const {profilePic} = req.body;
+        const userId = req.user._id 
     } catch (error) {
-        
+        return res.status(500).json({ 
+            success: false, 
+            message: "Internal server error",
+            error: error.message 
+        });
     }
 }
