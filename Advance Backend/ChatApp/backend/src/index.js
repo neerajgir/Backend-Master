@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { connectDB } from "./config/db.js";
 
 
 const app = express();
@@ -18,4 +19,5 @@ app.use(cors({
  
 app.listen(PORT, ()=>{
     console.log(`Server is up on Port ${PORT}`)
+    connectDB();
 });
