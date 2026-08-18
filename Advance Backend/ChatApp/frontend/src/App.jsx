@@ -5,6 +5,7 @@ import SignUpPage from "../src/pages/SignUpPage"
 import LoginPage from "../src/pages/LoginPage"
 import SettingsPage from "../src/pages/SettingsPage"
 import ProfilePage from "../src/pages/ProfilePage"
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
   const authUser = false;
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
       </Routes>
+      <Toaster/>
     </div>
   )
 }
