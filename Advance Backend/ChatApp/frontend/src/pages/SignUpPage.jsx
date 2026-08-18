@@ -6,8 +6,10 @@ import toast from "react-hot-toast";
 import AuthImagePattern from '../components/AuthImagePattern';
 import { Link } from 'react-router-dom';
 import axios from "axios"
+import { useAuthStore } from '../store/useAuthStore';
 
 const SignUpPage = () => {
+  const {signup} = useAuthStore();
     const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -27,7 +29,10 @@ const SignUpPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const success = validateForm();
+    if(success){
+      signup(formData);
+    }
   };
 
   return (

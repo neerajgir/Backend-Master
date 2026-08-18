@@ -3,9 +3,10 @@ import { useState } from "react";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
 
 const LoginPage = () => {
-
+  const {login} = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
