@@ -6,6 +6,7 @@ import cors from "cors";
 
 import { connectDB } from "./config/db.js";
 import authRoute from "./routes/auth.routes.js"
+import messageRoute from "./routes/message.routes.js"
 
 
 const app = express();
@@ -20,7 +21,7 @@ app.use(cors({
 
 // routes
 app.use("/api/auth", authRoute);
-
+app.use("/api/messages", messageRoute)
 
  
 app.listen(PORT, ()=>{
