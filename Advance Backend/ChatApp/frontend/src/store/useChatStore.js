@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
-import { useAuthStore } from "./useAuthStore";
+import { notifyNewMessage, updateAppTitle, getTotalUnread } from "../lib/notifications";
 
 export const useChatStore = create((set, get) => ({
   messages: [],
@@ -9,7 +9,8 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
- 
+  onlineUsers: [],
+  unreadCounts: {},
 
   getUsers: async () => {
     set({ isUsersLoading: true });
@@ -34,37 +35,58 @@ export const useChatStore = create((set, get) => ({
       set({ isMessagesLoading: false });
     }
   },
+
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
     try {
-      const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
+      const res = await axiosInstance.post(
+        `/messages/send/${selectedUser._id}`,
+        messageData
+      );
       set({ messages: [...messages, res.data] });
     } catch (error) {
       toast.error(error.response.data.message);
     }
   },
 
+  handleIncomingMessage: (newMessage) => {
+    const { selectedUser, messages, unreadCounts, users } = get();
 
-//   subscribeToMessages: () => {
-//     const { selectedUser } = get();
-//     if (!selectedUser) return;
+    if (selectedUser && newMessage.senderId === selectedUser._id) {
+      set({ messages: [...messages, newMessage] });
+      return;
+    }
 
-//     const socket = useAuthStore.getState().socket;
+    const sender = users.find((u) => u._id === newMessage.senderId);
+    const nextCounts = {
+      ...unreadCounts,
+      [newMessage.senderId]: (unreadCounts[newMessage.senderId] || 0) + 1,
+    };
+    set({ unreadCounts: nextCounts });
+    updateAppTitle(getTotalUnread(nextCounts));
+    notifyNewMessage(newMessage, sender);
+  },
 
-//     socket.on("newMessage", (newMessage) => {
-//       const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
-//       if (!isMessageSentFromSelectedUser) return;
+  setSelectedUser: (selectedUser) => {
+    const { unreadCounts } = get();
+    if (selectedUser?._id && unreadCounts[selectedUser._id]) {
+      const nextCounts = { ...unreadCounts };
+      delete nextCounts[selectedUser._id];
+      set({ selectedUser, unreadCounts: nextCounts });
+      updateAppTitle(getTotalUnread(nextCounts));
+    } else {
+      set({ selectedUser });
+    }
+  },
 
-//       set({
-//         messages: [...get().messages, newMessage],
-//       });
-//     });
-//   },
-
-//   unsubscribeFromMessages: () => {
-//     const socket = useAuthStore.getState().socket;
-//     socket.off("newMessage");
-//   },
-
-  setSelectedUser: (selectedUser) => set({ selectedUser }),
+  resetChatState: () =>
+    set({
+      messages: [],
+      users: [],
+      selectedUser: null,
+      isUsersLoading: false,
+      isMessagesLoading: false,
+      onlineUsers: [],
+      unreadCounts: {},
+    }),
 }));

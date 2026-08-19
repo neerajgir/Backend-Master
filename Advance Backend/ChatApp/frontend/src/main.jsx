@@ -3,6 +3,11 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from "react-router-dom"
 import './index.css'
 import App from './App.jsx'
+import { THEMES, DEFAULT_THEME } from './lib/themes'
+
+const savedTheme = localStorage.getItem("chat-theme");
+const validTheme = THEMES.some((t) => t.value === savedTheme);
+document.documentElement.setAttribute("data-theme", validTheme ? savedTheme : DEFAULT_THEME);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
