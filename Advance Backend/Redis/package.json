@@ -2,9 +2,9 @@
   "name": "redis",
   "version": "1.0.0",
   "description": "all about redis",
-  "main": "sets.js",
+  "main": "sortedsets.js",
   "scripts": {
-    "dev": "nodemon sets.js"
+    "dev": "nodemon sortedsets.js"
   },
   "keywords": [],
   "author": "Neeraj",
