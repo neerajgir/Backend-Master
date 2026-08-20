@@ -2,9 +2,9 @@
   "name": "redis",
   "version": "1.0.0",
   "description": "all about redis",
-  "main": "client.js",
+  "main": "strings.js",
   "scripts": {
-    "dev": "nodemon client.js"
+    "dev": "nodemon strings.js"
   },
   "keywords": [],
   "author": "Neeraj",
