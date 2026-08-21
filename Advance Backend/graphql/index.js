@@ -8,33 +8,51 @@ import axios from "axios";
 async function startServer() {
     const app = express();
     const typeDefs = `
-    type User {
+  type User {
     id: ID!
     name: String!
     username: String!
     email: String!
     phone: String!
     website: String!
-    }
+    todo: [Todo]
+  }
 
-    type Todo {
+  type Todo {
     id: ID!
     title: String
-    completed: Boolean 
-    }
+    completed: Boolean
+    user: User
+  }
 
-    type Query {
+  type Query {
     getTodos: [Todo]
     getUsers: [User]
-    }
-    `
-    const resolvers = {
-        Query:{
-            getTodos: async ()=> (await axios.get("https://jsonplaceholder.typicode.com/todos")).data,
+    getUserById(id: ID!): User
+  }
 
-            getUsers: async ()=> (await axios.get("https://jsonplaceholder.typicode.com/users")).data
-        }
+  type Mutation {
+    createTodo(title: String!, userId: ID!): Todo
+  }
+`
+
+const resolvers = {
+  Query: {
+    getTodos: async () => (await axios.get("https://jsonplaceholder.typicode.com/todos")).data,
+    getUsers: async () => (await axios.get("https://jsonplaceholder.typicode.com/users")).data, // Fixed name
+    getUserById: async (_, { id }) => {
+      const user = (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)).data;
+      return user;
     }
+  },
+  Mutation: {
+    createTodo: async (_, { title, userId }) => {
+      const response = await axios.post("https://jsonplaceholder.typicode.com/todos", { title, userId, completed: false })
+      return response.data;
+    }
+  }
+}
+
     const server = new ApolloServer({typeDefs, resolvers})
     await server.start()
     app.use(bodyParser.json());
