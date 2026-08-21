@@ -2,9 +2,9 @@
   "name": "redis",
   "version": "1.0.0",
   "description": "all about redis",
-  "main": "bitmaps.js",
+  "main": "hll.js",
   "scripts": {
-    "dev": "nodemon bitmaps.js"
+    "dev": "nodemon hll.js"
   },
   "keywords": [],
   "author": "Neeraj",
