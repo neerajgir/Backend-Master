@@ -20,6 +20,8 @@ app.get("/mongo", async (req,res) => {
 
 
 
+
+
 connectDB().then(() => {
     console.log("MongoDB connected successfully")
 }).catch(err => {
