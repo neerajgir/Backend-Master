@@ -17,6 +17,7 @@ app.get("/mongo", async (req,res) => {
     res.json({message: `Mongo connected: ${connect}`});       
 })
 
+// site banner with redis
 const BANNER_KEY = "app:banner";
 
 app.post("/banner", async (req,res) => {
