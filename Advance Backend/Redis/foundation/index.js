@@ -1,5 +1,6 @@
 import express from "express"
 import mongoose from "mongoose"
+import {Job, Queue, Worker} from "bullmq";
 import client from "./config/client.js"
 import connectDB from "./config/db.js"
 
@@ -16,7 +17,6 @@ app.get("/mongo", async (req,res) => {
     const connect = await mongoose.connection.readyState;
     res.json({message: `Mongo connected: ${connect}`});       
 })
-
 
 
 
