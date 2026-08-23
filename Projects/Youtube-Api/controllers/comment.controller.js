@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Comment from "../models/comment.model.js";
-import {checkAuth} from "../middleware/auth.middleware.js";
+
 
 // comment
 export const newComment = async (req,res)=>{

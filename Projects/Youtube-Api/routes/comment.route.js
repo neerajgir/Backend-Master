@@ -1,5 +1,6 @@
 import express from "express";
-import { checkAuth } from "../middleware/auth.middleware";
+import {newComment, commentId, commentUpdateById, getCommentById} from "../controllers/comment.controller.js"
+import { checkAuth } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
