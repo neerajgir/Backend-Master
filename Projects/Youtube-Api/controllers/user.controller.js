@@ -78,7 +78,18 @@ export const login = async (req,res) => {
 
 export const updateProfile = async (req,res) => {
     try {
-        
+        const {channelName , phone} = req.body;
+    let updatedData = {channelName , phone}
+
+    if(req.files && req.files.logoUrl){
+    const uploadedImage = await cloudinary.uploader.upload(req.files.logoUrl.tempFilePath);
+    updatedData.logoUrl = uploadedImage.secure_url;
+    updatedData.logoId = uploadedImage.public_id
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(req.user._id , updatedData , {new:true})
+
+    res.status(200).json({message:"Profile Updated Successfully" , updatedUser})
     } catch (error) {
         console.error("Update-profile error:", error);
         res.status(500).json({ error: "Update-profile failed", details: error.message });
@@ -89,8 +100,27 @@ export const updateProfile = async (req,res) => {
 
 export const subscribe = async (req,res) => {
     try {
-        
+        const {channelId} = req.body // *userId = currentUser , channelId = user to subscribe ( channel)
+    
+        if(req.user._id === channelId){
+            return res.status(400).json({error:"You cannot subscribe to yourself"})
+        }
+
+        const currentUser =   await User.findByIdAndUpdate(req.user._id , {
+            $addToSet:{subscribedChannels:channelId}
+        })
+
+        const subscribedUser =   await User.findByIdAndUpdate(channelId , {
+            $inc:{subscribers:1}
+        })
+
+        res.status(200).json({
+            message:"Subscribed Successfully✅",
+            data:{currentUser, subscribedUser}
+        })
+    
     } catch (error) {
-        
+        console.error("Subscribe-channel error:", error);
+        res.status(500).json({ error: "Subscribe-channel failed", details: error.message });
     }
 }
