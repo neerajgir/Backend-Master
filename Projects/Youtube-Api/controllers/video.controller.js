@@ -109,3 +109,27 @@ export const getAllVideos = async (req,res) => {
         res.status(500).json({ error: "Upload failed", details: error.message });
     }
 }
+
+//get videos by id 
+export const getVideoById = async (req,res) => {
+    try {
+        const videoId = req.params.id;
+        const userId = req.user._id;
+
+    // Use findByIdAndUpdate to add the user ID to the viewedBy array if not already present
+        const video = await Video.findByIdAndUpdate(
+        videoId,
+        {
+        $addToSet: { viewedBy: userId },  // Add user ID to viewedBy array, avoiding duplicates
+        },
+        { new: true }  // Return the updated video document
+    );
+
+        if (!video) return res.status(404).json({ error: "Video not found" });
+
+        res.status(200).json(video);
+    } catch (error) {
+        console.error("Upload error:", error);
+        res.status(500).json({ error: "Upload failed", details: error.message });
+    }
+}
