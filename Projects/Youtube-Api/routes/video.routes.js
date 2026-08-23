@@ -5,4 +5,8 @@ import User from "../models/user.model.js";
 import Video from "../models/video.model.js";
 import cloudinary from "../config/cloudinary.js";
 
- 
+const router = express.Router();
+
+
+
+export default router;

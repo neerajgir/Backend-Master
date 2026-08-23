@@ -7,6 +7,7 @@ import fileupload from "express-fileupload";
 
 import {connectDB} from "./config/db.config.js"
 import userRoutes from "./routes/user.routes.js"
+import videoRoutes from "./routes/video.routes.js"
 
 
 const PORT = process.env.PORT || 5000
@@ -18,6 +19,7 @@ app.use(fileupload({
 }))
 
 app.use("/api/v1/user", userRoutes)
+app.use("/api/v1/video", videoRoutes)
 
 
 
