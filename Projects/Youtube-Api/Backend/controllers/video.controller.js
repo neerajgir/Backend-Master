@@ -159,13 +159,25 @@ export const videoByTags = async (req,res) => {
 export const likesVideos = async (req,res) => {
     try {
         const {videoId} = req.body;
-    
-        const video =   await Video.findByIdAndUpdate(videoId , {
-        $addToSet:{likedBy:req.user._id},
-        $pull:{disLikedBy:req.user._id}
-    })
 
-        res.status(200).json({message:"Liked the video" , video}) 
+        const video = await Video.findById(videoId);
+        if(!video) return res.status(404).json({ error: "Video not found" });
+
+        const uid = req.user._id.toString();
+        const alreadyLiked = video.likedBy.some((id) => id.toString() === uid);
+
+        if(alreadyLiked){
+            // toggle off
+            video.likedBy = video.likedBy.filter((id) => id.toString() !== uid);
+        } else {
+            video.likedBy.push(req.user._id);
+            // liking removes a previous dislike
+            video.disLikedBy = video.disLikedBy.filter((id) => id.toString() !== uid);
+        }
+
+        await video.save();
+
+        res.status(200).json({message: alreadyLiked ? "Like removed" : "Liked the video", video})
     } catch (error) {
         console.error("Fetch Likes error:", error);
         res.status(500).json({ error: "Fetch Likes failed", details: error.message })
@@ -177,11 +189,27 @@ export const dislikesVideos = async (req,res)=>{
     try {
         const { videoId } = req.body;
 
-        await Video.findByIdAndUpdate(videoId, {
-        $addToSet: { disLikedBy: req.user._id},
-        $pull: { likedBy: req.user._id }, // Remove from likes if previously liked
+        const video = await Video.findById(videoId);
+        if(!video) return res.status(404).json({ error: "Video not found" });
+
+        const uid = req.user._id.toString();
+        const alreadyDisliked = video.disLikedBy.some((id) => id.toString() === uid);
+
+        if(alreadyDisliked){
+            // toggle off
+            video.disLikedBy = video.disLikedBy.filter((id) => id.toString() !== uid);
+        } else {
+            video.disLikedBy.push(req.user._id);
+            // disliking removes a previous like
+            video.likedBy = video.likedBy.filter((id) => id.toString() !== uid);
+        }
+
+        await video.save();
+
+        res.status(200).json({
+            message: alreadyDisliked ? "Dislike removed" : "Disliked the video",
+            video,
         });
-        res.status(200).json({ message: "Disliked the video" });
     } catch (error) {
         console.error("Fetch Dislikes error:", error);
         res.status(500).json({ error: "Fetch Dislikes failed", details: error.message })

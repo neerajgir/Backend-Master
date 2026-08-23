@@ -1,0 +1,9 @@
+[
+  {
+    "date": "2026-08-24",
+    "macrostructure": "Workbench",
+    "theme": "Terminal",
+    "enrichment": "none",
+    "brief": "OpenTube · end-to-end React UI for Express video API (auth, feed, watch, comments, likes, subscribe, upload, studio)"
+  }
+]

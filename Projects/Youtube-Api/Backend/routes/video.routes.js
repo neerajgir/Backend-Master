@@ -12,7 +12,7 @@ router.get("/my-videos" , checkAuth, getAllVideos)
 router.get("/:id" , checkAuth, getVideoById)
 router.get("/category/:category" , getVideoByCategory)
 router.get("/tags/:tag" , videoByTags)
-router.post("/like" , likesVideos)
+router.post("/like" , checkAuth, likesVideos)
 router.post("/dislike" , checkAuth, dislikesVideos)
 
 
