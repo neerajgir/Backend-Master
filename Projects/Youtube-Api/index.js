@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv"
 dotenv.config();
 import fileupload from "express-fileupload";
-import bodyParser from "body-parser";
+
 
 
 import {connectDB} from "./config/db.config.js"
