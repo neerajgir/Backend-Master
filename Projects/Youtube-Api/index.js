@@ -7,11 +7,13 @@ import {connectDB} from "./config/db.config.js"
 import userRoutes from "./routes/user.routes.js"
 
 
-
+const PORT = process.env.PORT || 5000
 const app = express();
 app.use(express.json());
+
+
 app.use("/api/v1/user", userRoutes)
-const PORT = process.env.PORT || 5000
+
 
 
 
