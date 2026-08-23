@@ -5,11 +5,11 @@ import fileupload from "express-fileupload";
 
 
 
-import {connectDB} from "./config/db.config.js"
-import userRoutes from "./routes/user.routes.js"
-import videoRoutes from "./routes/video.routes.js"
-import commentRoutes from "./routes/comment.route.js"
-
+import {connectDB} from "../Backend/config/db.config.js"
+import userRoutes from "../Backend/routes/user.routes.js"
+import videoRoutes from "../Backend/routes/video.routes.js"
+import commentRoutes from "../Backend/routes/comment.route.js"
+    
 
 const PORT = process.env.PORT || 5000
 const app = express();
