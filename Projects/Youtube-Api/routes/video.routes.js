@@ -1,5 +1,5 @@
 import express from "express";
-import { upload, updateVideo } from "../controllers/video.controller.js";
+import { upload, updateVideo, deleteVideo } from "../controllers/video.controller.js";
 import {checkAuth} from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.post("/upload", checkAuth, upload)
 router.put("/upload/:id", checkAuth, updateVideo)
+router.delete("/delete/:id" , checkAuth, deleteVideo)
 
 export default router;
