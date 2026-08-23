@@ -66,8 +66,8 @@ export const updateVideo = async (req,res)=>{
         await video.save();
         res.status(200).json({ message: "Video updated successfully", video });
     } catch (error) {
-        console.error("Upload error:", error);
-        res.status(500).json({ error: "Upload failed", details: error.message });
+        console.error("Update error:", error);
+        res.status(500).json({ error: "Update failed", details: error.message });
     }
 }
 
@@ -94,8 +94,8 @@ export const deleteVideo =  async (req,res)=>{
     res.status(200).json({message:"video deleted successfully"})
 
   } catch (error) {
-    console.error("Upload error:", error);
-    res.status(500).json({ error: "Upload failed", details: error.message });
+    console.error("Delete error:", error);
+    res.status(500).json({ error: "Delete failed", details: error.message });
   }    
 }
 
@@ -105,8 +105,8 @@ export const getAllVideos = async (req,res) => {
         const videos = await Video.find({user_id:req.user._id}).sort({createdAt:-1});
         res.status(200).json(videos)
     } catch (error) {
-        console.error("Upload error:", error);
-        res.status(500).json({ error: "Upload failed", details: error.message });
+        console.error("Get all videos error:", error);
+        res.status(500).json({ error: "Get all videos failed", details: error.message });
     }
 }
 
@@ -129,7 +129,61 @@ export const getVideoById = async (req,res) => {
 
         res.status(200).json(video);
     } catch (error) {
-        console.error("Upload error:", error);
-        res.status(500).json({ error: "Upload failed", details: error.message });
+        console.error("videos by id  error:", error);
+        res.status(500).json({ error: "videos by id  failed", details: error.message });
+    }
+}
+
+// Get video by category
+export const getVideoByCategory = async (req,res) => {
+    try {
+        const videos = await Video.find({ category: req.params.category }).sort({ createdAt: -1 });
+        res.status(200).json(videos);
+  } catch (error) {
+        console.error("Category error:", error);
+        res.status(500).json({ error: "Category failed", details: error.message });
+  }
+}
+// video by tags
+export const videoByTags = async (req,res) => {
+    try {
+        const tag = req.params.tag;
+        const videos = await Video.find({ tags: tag }).sort({ createdAt: -1 });
+        res.status(200).json(videos);
+  } catch (error) {
+    console.error("Fetch Tags error:", error);
+    res.status(500).json({ error: "Fetch Tags failed", details: error.message });
+  }
+}
+//video likes
+export const likesVideos = async (req,res) => {
+    try {
+        const {videoId} = req.body;
+    
+        const video =   await Video.findByIdAndUpdate(videoId , {
+        $addToSet:{likedBy:req.user._id},
+        $pull:{disLikedBy:req.user._id}
+    })
+
+        res.status(200).json({message:"Liked the video" , video}) 
+    } catch (error) {
+        console.error("Fetch Likes error:", error);
+        res.status(500).json({ error: "Fetch Likes failed", details: error.message })
+    }
+}
+// videos dislikes
+
+export const dislikesVideos = async (req,res)=>{
+    try {
+        const { videoId } = req.body;
+
+        await Video.findByIdAndUpdate(videoId, {
+        $addToSet: { disLikedBy: req.user._id},
+        $pull: { likedBy: req.user._id }, // Remove from likes if previously liked
+        });
+        res.status(200).json({ message: "Disliked the video" });
+    } catch (error) {
+        console.error("Fetch Dislikes error:", error);
+        res.status(500).json({ error: "Fetch Dislikes failed", details: error.message })
     }
 }
