@@ -98,3 +98,14 @@ export const deleteVideo =  async (req,res)=>{
     res.status(500).json({ error: "Upload failed", details: error.message });
   }    
 }
+
+//get all videos
+export const getAllVideos = async (req,res) => {
+    try {
+        const videos = await Video.find({user_id:req.user._id}).sort({createdAt:-1});
+        res.status(200).json(videos)
+    } catch (error) {
+        console.error("Upload error:", error);
+        res.status(500).json({ error: "Upload failed", details: error.message });
+    }
+}
