@@ -1,12 +1,10 @@
 import express from "express";
-import mongoose from "mongoose";
-
-import User from "../models/user.model.js";
-import Video from "../models/video.model.js";
-import cloudinary from "../config/cloudinary.js";
+import { upload } from "../controllers/video.controller.js";
+import {checkAuth} from "../middleware/auth.middleware.js";
 
 const router = express.Router();
+// router.use(fileUpload({ useTempFiles: true }));
 
-
+router.post("/upload", checkAuth, upload)
 
 export default router;
