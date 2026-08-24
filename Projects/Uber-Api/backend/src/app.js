@@ -3,8 +3,13 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import userRoutes from "./routes/user.routes.js"
+import connectDB from "./configs/db.config.js"
 
 const app = express();
+
+export const initDB = async () => {
+    await connectDB();
+};
 
 //Middlewares
 app.use(express.json());
