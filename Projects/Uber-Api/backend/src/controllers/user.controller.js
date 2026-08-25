@@ -1,5 +1,6 @@
 import { validationResult } from "express-validator";
 import userModel from "../models/user.model.js";
+import {createUser} from "../services/user.services.js";
 
 export const registerUser = async (req, res) => {
     try {
@@ -25,6 +26,7 @@ export const registerUser = async (req, res) => {
         const token = user.generateAuthToken();
         res.status(201).json({user ,token});
     } catch (error) {
+        console.log(error)
         res.status(500).json({message: "Internal server error"});
     }
 }
