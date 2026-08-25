@@ -1,5 +1,10 @@
 import './App.css'
 import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import UserLogin from './pages/UserLogin';
+import UserRegister from './pages/UserRegister';
+import CaptainLogin from './pages/CaptainLogin';
+import CaptainRegister from './pages/CaptainRegister';
 
 function App() {
   return (
