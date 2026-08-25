@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <div>
       <Navbar />
-      <main>
+      <main className='pt-[4rem]'>
         <Outlet />
       </main>
       <Footer />

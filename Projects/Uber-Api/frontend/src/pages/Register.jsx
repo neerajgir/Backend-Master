@@ -1,48 +1,48 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { CarFrontIcon, UserRoundIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ArrowRightIcon, CarFrontIcon, UserRoundIcon } from 'lucide-react'
+import AuthCard from '@/features/global/components/auth-card'
 import UserRegisterForm from '@/features/auth/components/user-register-form'
 import CaptainRegisterForm from '@/features/auth/components/captain-register-form'
 
 const Register = () => {
-  const [role, setRole] = useState('user')
-  const isCaptain = role === 'captain'
-
   return (
-    <div className={cn('min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-10 transition-colors', isCaptain ? 'bg-black' : 'bg-background')}>
-      <div className={cn('w-full max-w-md rounded-xl border p-6 sm:p-8 shadow-sm', isCaptain ? 'bg-black border-white/15 text-white' : 'bg-card')}>
-        <h1 className='text-xl font-bold tracking-tight mb-1'>Create an account</h1>
-        <p className={cn('text-sm mb-6', isCaptain ? 'text-gray-400' : 'text-muted-foreground')}>
-          Register as a rider or captain
-        </p>
+    <div className='min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-10 sm:py-14 bg-background'>
+      <div className='grid w-full max-w-5xl gap-6 md:gap-8 lg:grid-cols-2 items-stretch'>
+        <AuthCard
+          variant='light'
+          icon={UserRoundIcon}
+          title='Create a rider account'
+          subtitle='Sign up in seconds and get moving with Uber.'
+          footer={
+            <>
+              Already have an account?{' '}
+              <Link to='/login' className='font-medium text-primary hover:underline'>
+                Sign in
+              </Link>
+            </>
+          }
+        >
+          <UserRegisterForm />
+        </AuthCard>
 
-        <Tabs value={role} onValueChange={setRole}>
-          <TabsList className={cn('w-full mb-6', isCaptain && 'bg-input/30 border border-white/15 text-gray-400')}>
-            <TabsTrigger value='user' className='flex-1 gap-2'>
-              <UserRoundIcon data-icon='inline-start' />
-              Rider
-            </TabsTrigger>
-            <TabsTrigger value='captain' className='flex-1 gap-2'>
-              <CarFrontIcon data-icon='inline-start' />
-              Captain
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value='user'>
-            <UserRegisterForm />
-          </TabsContent>
-          <TabsContent value='captain'>
-            <CaptainRegisterForm />
-          </TabsContent>
-        </Tabs>
-
-        <p className={cn('mt-6 text-sm text-center', isCaptain ? 'text-gray-400' : 'text-muted-foreground')}>
-          Already have an account?{' '}
-          <Link to='/login' className='font-medium text-primary hover:underline'>
-            Sign in
-          </Link>
-        </p>
+        <AuthCard
+          variant='dark'
+          icon={CarFrontIcon}
+          title='Register as captain'
+          subtitle='Add your vehicle details and start earning.'
+          footer={
+            <>
+              Already registered?{' '}
+              <Link to='/login' className='inline-flex items-center gap-1 font-medium text-white hover:underline'>
+                Sign in to drive
+                <ArrowRightIcon className='size-3.5' />
+              </Link>
+            </>
+          }
+        >
+          <CaptainRegisterForm />
+        </AuthCard>
       </div>
     </div>
   )
