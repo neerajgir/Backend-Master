@@ -41,13 +41,13 @@ const Navbar = () => {
         </Button>
         <Button
           variant='ghost'
-          render={<Link to='/user-login' />}
+          render={<Link to='/login' />}
           className='text-white hover:bg-white/10 rounded-full'
         >
           Log in
         </Button>
         <Button
-          render={<Link to='/user-register' />}
+          render={<Link to='/register' />}
           className='bg-white text-black hover:bg-gray-200 rounded-full'
         >
           Sign up

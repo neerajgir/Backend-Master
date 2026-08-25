@@ -107,7 +107,7 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className='w-full h-[300px] sm:h-[400px] lg:flex-1 lg:h-[500px] rounded-xl overflow-hidden'>
+      <div className='w-full h-75 sm:h-100 lg:flex-1 lg:h-125 rounded-xl overflow-hidden'>
         <RideMap />
       </div>
     </section>

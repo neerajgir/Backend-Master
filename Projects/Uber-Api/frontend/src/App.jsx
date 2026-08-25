@@ -1,10 +1,8 @@
 import './App.css'
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
-import UserLogin from './pages/UserLogin';
-import UserRegister from './pages/UserRegister';
-import CaptainLogin from './pages/CaptainLogin';
-import CaptainRegister from './pages/CaptainRegister';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import Layout from './features/global/components/layout';
 
 function App() {
@@ -13,10 +11,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="user-login" element={<UserLogin />} />
-          <Route path="user-register" element={<UserRegister />} />
-          <Route path="captain-login" element={<CaptainLogin />} />
-          <Route path="captain-register" element={<CaptainRegister />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="user-login" element={<Navigate to="/login" replace />} />
+          <Route path="captain-login" element={<Navigate to="/login" replace />} />
+          <Route path="user-register" element={<Navigate to="/register" replace />} />
+          <Route path="captain-register" element={<Navigate to="/register" replace />} />
         </Route>
       </Routes>
     </div>
