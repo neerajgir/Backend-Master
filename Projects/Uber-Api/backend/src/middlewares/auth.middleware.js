@@ -2,7 +2,7 @@ import userModel from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export const authUser = async (req, res, next) => {
+const authUser = async (req, res, next) => {
     try {
     const token = req.cookies.token || req.header("Authorization")?.replace("Bearer ", "");
     if(!token){
@@ -20,3 +20,5 @@ export const authUser = async (req, res, next) => {
         res.status(500).json({message: "Internal server error"});
     }
 }
+
+export default authUser;
