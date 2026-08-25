@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 
 const navLinks = [
   { label: "Ride", to: "/" },
-  { label: "Drive", to: "/captain-login" },
+  { label: "Drive", to: "/login" },
   { label: "Business", to: "/" },
   { label: "About", to: "/" },
 ]
@@ -22,6 +22,7 @@ const Navbar = () => {
             <Button
               key={link.label}
               variant='ghost'
+              nativeButton={false}
               render={<Link to={link.to} />}
               className='text-gray-300 hover:text-white hover:bg-white/10 rounded-full'
             >
@@ -41,12 +42,14 @@ const Navbar = () => {
         </Button>
         <Button
           variant='ghost'
+          nativeButton={false}
           render={<Link to='/login' />}
           className='text-white hover:bg-white/10 rounded-full'
         >
           Log in
         </Button>
         <Button
+          nativeButton={false}
           render={<Link to='/register' />}
           className='bg-white text-black hover:bg-gray-200 rounded-full'
         >
