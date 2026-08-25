@@ -1,31 +1,17 @@
-import { useState } from 'react'
 import './App.css'
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div>
-          <h1>Uber Clone</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="spacer"></section>
-    </>
+    <div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/user-login" element={<UserLogin />} />
+        <Route path="/user-register" element={<UserRegister />} />
+        <Route path="/captain-login" element={<CaptainLogin />} />
+        <Route path="/captain-register" element={<CaptainRegister />} />
+      </Routes>
+    </div>
   )
 }
 
