@@ -1,11 +1,11 @@
-import socketIO from "socket.io"
+import { Server } from "socket.io"
 import userModel from "./src/models/user.model.js"
 import captainModel from "./src/models/captain.model.js"
 
 let io;
 
 function initializeSocket(server) {
-    io = socketIO(server,{
+    io = new Server(server,{
         cors:{
             origin: "*",
             methods: ["GET", "POST"]
@@ -42,4 +42,4 @@ const sendMessageToSocketId = (socketId, messageObj)=>{
     }
 } 
 
-export {initializeSocket , sendMessageToSocketId};
+export { initializeSocket, sendMessageToSocketId };
