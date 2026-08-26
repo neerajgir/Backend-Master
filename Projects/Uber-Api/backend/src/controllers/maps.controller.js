@@ -1,5 +1,5 @@
 import {validationResult} from "express-validator";
-import { getAddressCoordinate } from "../services/map.services.js";
+import { getAddressCoordinate, getDistanceAndTime, getAutoCompleteSuggestionservice } from "../services/map.services.js";
 
 export const getCoordinates = async (req, res) => {
     const errors = validationResult(req);
@@ -23,6 +23,13 @@ export const getDistanceTime = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     // Implementation for getting distance and time
+    try {
+        const { origin, destination } = req.query;
+        const distanceTime = await getDistanceAndTime(origin, destination);
+        res.status(200).json(distanceTime);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
 };
 
 export const getAutoCompleteSuggestions = async (req, res) => {
@@ -31,4 +38,11 @@ export const getAutoCompleteSuggestions = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     // Implementation for getting auto-complete suggestions
+    try {
+        const { query } = req.query;
+        const suggestions = await getAutoCompleteSuggestionservice(req, res);
+        res.status(200).json(suggestions);
+    }   catch (error) {
+        res.status(404).json({ error: error.message });
+    }
 };
