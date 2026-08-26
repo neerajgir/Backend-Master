@@ -1,4 +1,5 @@
 import {validationResult} from "express-validator";
+import { getAddressCoordinate } from "../services/map.services.js";
 
 export const getCoordinates = async (req, res) => {
     const errors = validationResult(req);
@@ -12,7 +13,7 @@ export const getCoordinates = async (req, res) => {
         const coordinates = await getAddressCoordinate(address);
         res.status(200).json( coordinates );
     } catch (error) {
-        res.status(404).json({ error: "Failed to get coordinates" });
+        res.status(404).json({ error: error.message });
     }
 };
 
