@@ -1,6 +1,7 @@
 import {validationResult} from 'express-validator';
 import  {getAddressCoordinate, getAutoCompleteSuggestionservice, getDistanceAndTime, getCaptainInTheRadius} from "../services/map.services.js";
-import rideModel from "../models/rider.model.js";
+import rideModel from '../models/rider.model.js';
+import { createRideService, getFareRide, confirmRideService, startRideService, endRideService} from '../services/rides.services.js';
 
 
 export const createRide = async (req, res) => {
@@ -36,7 +37,7 @@ export const getFare = async (req, res) => {
     }
     const {pickup, destination} = req.body;
     try {
-        const fare = await getFare(pickup, destination);
+        const fare = await getFareRide(pickup, destination);
         res.status(200).json(fare);
     }catch (error) {
         return res.status(500).json({ error: error.message });
@@ -50,7 +51,7 @@ export const confirmRide = async (req, res) => {
     }
     const {rideId} = req.body;
     try {
-        const ride = await confirmRide({rideId, captainId: req.captain});
+        const ride = await confirmRideService({rideId, captainId: req.captain});
         sendMessageToSocket(ride.user.socketId, {event:'newRide', data: ride});
         res.status(200).json(ride);
     } catch (error) {
@@ -65,7 +66,7 @@ export const startRide = async (req, res) => {
     }
     const {rideId, otp} = req.body;
     try {
-        const ride = await startRide({rideId, otp, captainId: req.captain});
+        const ride = await startRideService({rideId, otp, captainId: req.captain});
         sendMessageToSocket(ride.user.socketId, {event:'rideStarted', data: ride});
         res.status(200).json(ride);
     } catch (error) {
@@ -80,7 +81,7 @@ export const endRide = async (req, res) => {
     }
     const {rideId} = req.body;
     try {
-        const ride = await endRide({rideId, captainId: req.captain});
+        const ride = await endRideService({rideId, captainId: req.captain});
         sendMessageToSocket(ride.user.socketId, {event:'rideEnded', data: ride});
         res.status(200).json(ride);
     } catch (error) {
