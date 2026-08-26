@@ -2,7 +2,7 @@ import {validationResult} from 'express-validator';
 import  {getAddressCoordinate, getAutoCompleteSuggestionservice, getDistanceAndTime, getCaptainInTheRadius} from "../services/map.services.js";
 import rideModel from '../models/rider.model.js';
 import { createRideService, getFareRide, confirmRideService, startRideService, endRideService} from '../services/rides.services.js';
-
+import { sendMessageToSocketId } from "../socket.js";
 
 export const createRide = async (req, res) => {
     const errors = validationResult(req);
