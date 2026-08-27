@@ -57,35 +57,22 @@ export const getDistanceAndTime = async (originName, destinationName) => {
 };
 
 
-export const getAutoCompleteSuggestionservice = async (req, res) => {
-    try {
-        const { query } = req.query; // Extract query from request
-
-        if (!query) {
-            return res.status(400).json({ error: "Query parameter is required" });
-        }
-
-        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`;
-
-        const response = await axios.get(url, {
-            headers: { "User-Agent": "Uber" } // Required by Nominatim
-        });
-
-        if (response.data.length > 0) {
-            const suggestions = response.data.map((place) => ({
-                display_name: place.display_name,
-                lat: parseFloat(place.lat),
-                lng: parseFloat(place.lon),
-            }));
-
-            return res.json({ suggestions });
-        } else {
-            return res.status(404).json({ message: "No suggestions found" });
-        }
-    } catch (error) {
-        console.error("Autocomplete error:", error);
-        return res.status(500).json({ error: "Internal server error" });
+export const getAutoCompleteSuggestionservice = async (query) => {
+    if (!query) {
+        throw new Error("Query parameter is required");
     }
+
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`;
+
+    const response = await axios.get(url, {
+        headers: { "User-Agent": "Uber" } // Required by Nominatim
+    });
+
+    return response.data.map((place) => ({
+        display_name: place.display_name,
+        lat: parseFloat(place.lat),
+        lng: parseFloat(place.lon),
+    }));
 };
 
 

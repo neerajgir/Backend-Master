@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -6,11 +6,11 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field'
-import { useAuthSubmit } from './user-login-form'
+import { useAuthSubmit } from '../hooks/use-auth-submit'
 
 const UserRegisterForm = () => {
   const [form, setForm] = useState({ firstname: '', lastname: '', email: '', password: '' })
-  const { error, loading, submit } = useAuthSubmit({ path: '/users/register' })
+  const { error, loading, submit } = useAuthSubmit({ path: '/users/register', redirectTo: '/riding' })
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))

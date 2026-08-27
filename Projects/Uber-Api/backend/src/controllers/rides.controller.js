@@ -1,5 +1,5 @@
 import {validationResult} from 'express-validator';
-import  {getAddressCoordinate, getAutoCompleteSuggestionservice, getDistanceAndTime, getCaptainInTheRadius} from "../services/map.services.js";
+import {getAddressCoordinate, getCaptainInTheRadius} from "../services/map.services.js";
 import rideModel from '../models/rider.model.js';
 import { createRideService, getFareRide, confirmRideService, startRideService, endRideService} from '../services/rides.services.js';
 import { sendMessageToSocketId } from "../../socket.js";
@@ -9,22 +9,22 @@ export const createRide = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const {userId, pickup, destination, vehicleType} = req.body;
+    const {pickup, destination, vehicleType} = req.body;
     try {
-        const ride = await createRideService({user:req.user._id, pickup,     destination, vehicleType});
-        return res.status(201).json(ride);
+        const ride = await createRideService({user: req.user._id, pickup, destination, vehicleType});
 
         const pickupCoordinates = await getAddressCoordinate(pickup);
-        const nearbyCaptains = await getCaptainInTheRadius(pickupCoordinates.lat, pickupCoordinates.lng, 2);
+        const nearbyCaptains = await getCaptainInTheRadius(pickupCoordinates.lat, pickupCoordinates.lng, 5);
 
-        ride.otp = "";
         const rideWithUser = await rideModel.findOne({_id: ride._id}).populate('user');
 
-        nearbyCaptains.map(captain => {
-            sendMessageToSocket(captain.socketId, {event:'newRide', data: rideWithUser});
-        })
+        nearbyCaptains.forEach(captain => {
+            if (captain.socketId) {
+                sendMessageToSocketId(captain.socketId, {event: 'newRide', data: rideWithUser});
+            }
+        });
 
-
+        return res.status(201).json(ride);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -51,8 +51,10 @@ export const confirmRide = async (req, res) => {
     }
     const {rideId} = req.body;
     try {
-        const ride = await confirmRideService({rideId, captainId: req.captain});
-        sendMessageToSocket(ride.user.socketId, {event:'newRide', data: ride});
+        const ride = await confirmRideService({rideId, captain: req.captain});
+        if (ride.user?.socketId) {
+            sendMessageToSocketId(ride.user.socketId, {event: 'rideAccepted', data: ride});
+        }
         res.status(200).json(ride);
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -64,10 +66,12 @@ export const startRide = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const {rideId, otp} = req.body;
+    const {rideId, otp} = req.query;
     try {
-        const ride = await startRideService({rideId, otp, captainId: req.captain});
-        sendMessageToSocket(ride.user.socketId, {event:'rideStarted', data: ride});
+        const ride = await startRideService({rideId, otp, captain: req.captain});
+        if (ride.user?.socketId) {
+            sendMessageToSocketId(ride.user.socketId, {event: 'rideStarted', data: ride});
+        }
         res.status(200).json(ride);
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -81,8 +85,10 @@ export const endRide = async (req, res) => {
     }
     const {rideId} = req.body;
     try {
-        const ride = await endRideService({rideId, captainId: req.captain});
-        sendMessageToSocket(ride.user.socketId, {event:'rideEnded', data: ride});
+        const ride = await endRideService({rideId, captain: req.captain});
+        if (ride.user?.socketId) {
+            sendMessageToSocketId(ride.user.socketId, {event: 'rideEnded', data: ride});
+        }
         res.status(200).json(ride);
     } catch (error) {
         return res.status(500).json({ error: error.message });

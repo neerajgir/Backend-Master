@@ -3,7 +3,10 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Riding from './pages/Riding';
+import Captain from './pages/Captain';
 import Layout from './features/global/components/layout';
+import ProtectedRoute from './features/global/components/protected-route';
 
 function App() {
   return (
@@ -18,6 +21,22 @@ function App() {
           <Route path="user-register" element={<Navigate to="/register" replace />} />
           <Route path="captain-register" element={<Navigate to="/register" replace />} />
         </Route>
+        <Route
+          path="/riding"
+          element={
+            <ProtectedRoute role="user">
+              <Riding />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/captain"
+          element={
+            <ProtectedRoute role="captain">
+              <Captain />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   )

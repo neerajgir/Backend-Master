@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -14,7 +14,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field'
-import { useAuthSubmit, inputClass } from './user-login-form'
+import { useAuthSubmit, inputClass } from '../hooks/use-auth-submit'
 
 const initialForm = {
   firstname: '',
@@ -29,7 +29,7 @@ const initialForm = {
 
 const CaptainRegisterForm = () => {
   const [form, setForm] = useState(initialForm)
-  const { error, loading, submit } = useAuthSubmit({ path: '/captains/register', redirectTo: '/login' })
+  const { error, loading, submit } = useAuthSubmit({ path: '/captains/register', redirectTo: '/captain' })
 
   const handleChange = (e) => {
     setForm((prev) => ({

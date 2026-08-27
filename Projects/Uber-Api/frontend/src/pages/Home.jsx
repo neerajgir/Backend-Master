@@ -1,4 +1,3 @@
-import React from 'react'
 import Hero from '../features/home/components/hero'
 
 const Home = () => {

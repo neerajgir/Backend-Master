@@ -20,9 +20,7 @@ const captainSchema = new mongoose.Schema({
         select: false,
     },
     socketId: {
-        type: String,
-        enum: ["active", "unactive"],
-        default: "unactive"
+        type: String
     },
     vehicles: {
         color:{type: String, required: true, minlength: [3, "Color must be at least 3 characters long"]},
@@ -31,8 +29,16 @@ const captainSchema = new mongoose.Schema({
         vehicleType:{type: String, required: true, enum: ["car", "bike", "bus"], message: "Vehicle type must be either car, bike, or bus"},
     },
     location: {
-        ltd: {type: Number},
-        lng: {type: Number}
+        type: {
+            type: String,
+            enum: ["Point"],
+            default: "Point"
+        },
+        coordinates: {
+            type: [Number],
+            default: [0, 0],
+            index: "2dsphere"
+        }
     }
 })
 

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   BikeIcon,
   CalendarClockIcon,
@@ -8,6 +9,7 @@ import {
   SquareIcon,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useAuthStore } from '@/features/auth/store/auth-store'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -27,11 +29,24 @@ const rideTypes = [
 ]
 
 const Hero = () => {
+  const navigate = useNavigate()
+  const user = useAuthStore((s) => s.user)
   const [activeRide, setActiveRide] = useState('ride')
   const [pickup, setPickup] = useState('')
   const [destination, setDestination] = useState('')
   const [date, setDate] = useState('today')
   const [time, setTime] = useState('now')
+
+  const seePrices = () => {
+    if (!user) {
+      navigate('/login')
+      return
+    }
+    const params = new URLSearchParams()
+    if (pickup.trim()) params.set('pickup', pickup.trim())
+    if (destination.trim()) params.set('destination', destination.trim())
+    navigate(`/riding${params.toString() ? `?${params.toString()}` : ''}`)
+  }
 
   return (
     <section className='flex flex-col lg:flex-row items-center gap-8 lg:gap-12 px-4 py-10 sm:px-6 sm:py-14 lg:px-16 min-h-[calc(100vh-4rem)]'>
@@ -101,7 +116,7 @@ const Hero = () => {
             </Select>
           </div>
 
-          <Button size='lg' className='mt-4 w-full h-11 rounded-full font-semibold'>
+          <Button size='lg' onClick={seePrices} className='mt-4 w-full h-11 rounded-full font-semibold'>
             See prices
           </Button>
         </div>

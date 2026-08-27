@@ -1,47 +1,17 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
-
-export const useAuthSubmit = ({ path, redirectTo = '/' }) => {
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
-
-  const submit = async (payload) => {
-    setError('')
-    setLoading(true)
-    try {
-      await axios.post(`${API_URL}${path}`, payload, { withCredentials: true })
-      navigate(redirectTo)
-    } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return { error, loading, submit }
-}
-
-export const inputClass = {
-  light: 'h-11',
-  dark: 'h-11 bg-neutral-900 border-white/25 text-white placeholder:text-gray-500',
-}
+import { useAuthSubmit, inputClass } from '../hooks/use-auth-submit'
 
 const UserLoginForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { error, loading, submit } = useAuthSubmit({ path: '/users/login' })
+  const { error, loading, submit } = useAuthSubmit({ path: '/users/login', redirectTo: '/riding' })
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); submit({ email, password }) }}>

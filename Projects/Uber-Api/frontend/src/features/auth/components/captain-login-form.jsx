@@ -1,18 +1,17 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field'
-import { useAuthSubmit, inputClass } from './user-login-form'
+import { useAuthSubmit, inputClass } from '../hooks/use-auth-submit'
 
 const CaptainLoginForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { error, loading, submit } = useAuthSubmit({ path: '/captains/login' })
+  const { error, loading, submit } = useAuthSubmit({ path: '/captains/login', redirectTo: '/captain' })
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); submit({ email, password }) }}>

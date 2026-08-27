@@ -1,4 +1,3 @@
-import React from 'react'
 import { cn } from '@/lib/utils'
 
 const AuthCard = ({ variant = 'light', icon: Icon, title, subtitle, footer, children }) => {

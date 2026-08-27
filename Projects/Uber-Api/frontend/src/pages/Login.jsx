@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRightIcon, CarFrontIcon, UserRoundIcon } from 'lucide-react'
 import AuthCard from '@/features/global/components/auth-card'

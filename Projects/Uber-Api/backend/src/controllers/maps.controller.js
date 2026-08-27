@@ -39,9 +39,9 @@ export const getAutoCompleteSuggestions = async (req, res) => {
     }
     // Implementation for getting auto-complete suggestions
     try {
-        const { query } = req.query;
-        const suggestions = await getAutoCompleteSuggestionservice(req, res);
-        res.status(200).json(suggestions);
+        const { input } = req.query;
+        const suggestions = await getAutoCompleteSuggestionservice(input);
+        res.status(200).json({ suggestions });
     }   catch (error) {
         res.status(404).json({ error: error.message });
     }
