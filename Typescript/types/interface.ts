@@ -63,3 +63,9 @@ const config:Config = {
 }
 
 // config.appName = ''
+
+// type literals
+type TeaType = 'masala' | 'ginger' | 'lemon'
+function orderChais(t: TeaType){
+    console.log(t)
+}
