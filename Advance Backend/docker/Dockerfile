@@ -36,3 +36,7 @@ RUN npm install
 COPY . .
 
 CMD [ "node", "index.js" ]
+
+# avoid unnecessary
+
+# make .dockerignore file and add the name of those file u not to push 
