@@ -23,3 +23,16 @@ RUN npm install
 COPY index.js index.js
 
 CMD [ "node", "index.js" ] 
+
+# optimization for all files
+
+FROM Node
+
+WORKDIR /app
+
+COPY package*.json .
+RUN npm install
+
+COPY . .
+
+CMD [ "node", "index.js" ]
