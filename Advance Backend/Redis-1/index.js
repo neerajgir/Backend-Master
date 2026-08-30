@@ -4,12 +4,17 @@ dotenv.config()
 import { connectDB } from "./configs/db.js"
 import User from "./models/user.model.js"
 import client from "./configs/client.js"
+import { rateLimit } from "./middleware/ratelimit.js"
 
 const PORT = process.env.PORT || 5000
 
 const app = express();
 app.use(express.json());
 
+app.get("/get", rateLimit, async (req,res) => {
+    const user = await User.find({})
+    return res.json({user})
+})
 
 //api-caching
 app.post("/create", async (req,res) => {
@@ -50,6 +55,9 @@ app.post("/verify-otp", async (req,res) => {
     await client.del(`otp:${email}`)
     res.status(200).json({message: "otp verified"})
 })
+
+//rate-limiting
+
 
 
 
