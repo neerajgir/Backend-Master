@@ -47,7 +47,7 @@ app.post("/verify-otp", async (req,res) => {
     if(!cachedOtp) return res.json({message: "otp expire"})
 
     if(cachedOtp != otp) return res.status(400).json({message: "Incorrect OTP"})
-
+    await client.del(`otp:${email}`)
     res.status(200).json({message: "otp verified"})
 })
 
