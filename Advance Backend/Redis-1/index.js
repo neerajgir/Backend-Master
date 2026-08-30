@@ -5,6 +5,8 @@ import { connectDB } from "./configs/db.js"
 import User from "./models/user.model.js"
 import client from "./configs/client.js"
 import { rateLimit } from "./middleware/ratelimit.js"
+import {sendmail} from "./libs/sendemail.js"
+import {emailQueue} from "./queue.js"
 
 const PORT = process.env.PORT || 5000
 
@@ -21,6 +23,8 @@ app.post("/create", async (req,res) => {
     const {name, email, password} =req.body;
     await client.del("user:all")
     const user = await User.create({name, email, password})
+    // await sendmail()
+    await emailQueue.add("send-email",{email})
     return res.status(200).json({user})
 })
 
@@ -56,7 +60,8 @@ app.post("/verify-otp", async (req,res) => {
     res.status(200).json({message: "otp verified"})
 })
 
-//rate-limiting
+
+
 
 
 
