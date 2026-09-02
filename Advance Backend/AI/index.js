@@ -33,21 +33,24 @@ app.get("/", (req, res) => {
 });
 
 
-app.post("/generate", async (req, res) => {
-  const { prompt } = req.body;
+// app.post("/generate", async (req, res) => {
+//   const { prompt } = req.body;
 
-  const response = await genAI.models.generateContent({
-    model: "gemini-3.5-flash",
-    contents: [{
-      role: "user",
-      parts: [{
-        text: prompt
-      }]
-    }]
-  });
+//   const response = await genAI.models.generateContent({
+//     model: "gemini-3.5-flash",
+//     contents: [{
+//       role: "user",
+//       parts: [{
+//         text: prompt
+//       }]
+//     }]
+//   });
 
-  res.status(200).json({ response: response.text });
-});
+//   res.status(200).json({ response: response.text });
+// });
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
