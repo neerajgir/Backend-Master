@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import {GoogleGenAI} from "@google/genai"
+import {ChatGoogleGenerativeAI} from "@langchain/google-genai";
+import { ChatGroq } from "@langchain/groq";
 
 const app = express();
 const genAI = new GoogleGenAI({
@@ -50,7 +52,24 @@ app.get("/", (req, res) => {
 // });
 
 
+const llm = new ChatGroq({
+    model: "openai/gpt-oss-120b",
+    apiKey: process.env.GROQ_API_KEY,
+    temperature: 0.7,
+    maxTokens: 100,
+    maxRetries: 2,
+});
 
+app.post("/generate", async (req, res) => {
+  const { prompt } = req.body;
+
+  const response = await llm.invoke([
+    {role: "system", content: "You are a helpful assistant."},
+    {role: "human", content: prompt}
+  ]);
+
+  res.status(200).json({ response: response.content });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
