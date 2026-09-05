@@ -8,6 +8,10 @@ import { PDFParse } from "pdf-parse";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {RecursiveCharacterTextSplitter} from "@langchain/textsplitters"
+import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
+import { TaskType } from "@google/generative-ai";
+import { QdrantVectorStore } from "@langchain/qdrant";
+
 
 
 
@@ -44,6 +48,19 @@ const upload = async (req, res) => {
     console.log(doc);
 }
 upload();
+
+// embeddings
+const embeddings = new GoogleGenerativeAIEmbeddings({
+    apiKey: process.env.GOOGLE_API_KEY,
+    model: "gemini-embedding-001",
+    taskType: TaskType.RETRIEVAL_DOCUMENT,
+    title: "Knowledge Base Embeddings",
+});
+const vectorStore = await QdrantVectorStore.fromExistingCollection(embeddings, {
+  url: process.env.QDRANT_URL,
+  collectionName: "grocery_store",
+});
+
 
 app.post("/generate", async (req, res) => {
   const { prompt } = req.body;
