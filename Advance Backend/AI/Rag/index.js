@@ -28,6 +28,18 @@ const llm = new ChatGroq({
     maxRetries: 2,
 })
 
+// embeddings
+const embeddings = new GoogleGenerativeAIEmbeddings({
+    apiKey: process.env.GOOGLE_API_KEY,
+    model: "gemini-embedding-001",
+    taskType: TaskType.RETRIEVAL_DOCUMENT,
+    title: "Knowledge Base Embeddings",
+});
+const vectorStore = await QdrantVectorStore.fromExistingCollection(embeddings, {
+  url: process.env.QDRANT_URL,
+  collectionName: "grocery_store",
+});
+
 // rag - retrieval augmented generation
 // extract text from pdf
 const __filename = fileURLToPath(import.meta.url);
@@ -45,21 +57,11 @@ const upload = async (req, res) => {
         chunkOverlap: 200,
     });
     const doc = await splitter.createDocuments([text])
-    console.log(doc);
+    await vectorStore.addDocuments(doc);
 }
 upload();
 
-// embeddings
-const embeddings = new GoogleGenerativeAIEmbeddings({
-    apiKey: process.env.GOOGLE_API_KEY,
-    model: "gemini-embedding-001",
-    taskType: TaskType.RETRIEVAL_DOCUMENT,
-    title: "Knowledge Base Embeddings",
-});
-const vectorStore = await QdrantVectorStore.fromExistingCollection(embeddings, {
-  url: process.env.QDRANT_URL,
-  collectionName: "grocery_store",
-});
+
 
 
 app.post("/generate", async (req, res) => {
