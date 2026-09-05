@@ -11,7 +11,7 @@ import {RecursiveCharacterTextSplitter} from "@langchain/textsplitters"
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { TaskType } from "@google/generative-ai";
 import { QdrantVectorStore } from "@langchain/qdrant";
-
+import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 
 
 
@@ -59,19 +59,24 @@ const upload = async (req, res) => {
     const doc = await splitter.createDocuments([text])
     await vectorStore.addDocuments(doc);
 }
-upload();
+
 
 
 
 
 app.post("/generate", async (req, res) => {
-  const { prompt } = req.body;
+    const { prompt } = req.body;
+    const docs = await vectorStore.similaritySearch(prompt, 5);
+    const context = docs.map((doc) => doc.pageContent).join("\n");
 
-  const response = await llm.invoke([
-  { role: "user", 
-    content: prompt
-  }
-  ]);
+    const response = await llm.invoke([
+    new SystemMessage(
+        `You are a helpful assistant. Answer the question based on the context provided. If you don't know the answer, say you don't know.`
+    ),
+    new HumanMessage(
+        `Context: ${context}\n\nQuestion: ${prompt}`
+    )    
+    ]);
 
   res.status(200).json({ response: response.content });
 });
